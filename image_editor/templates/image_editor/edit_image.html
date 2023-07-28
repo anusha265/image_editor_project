@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Image Editor - Edit Image</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f1f1f1;
+    }
+ 
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+      color: #333;
+      text-align: center;
+    }
+
+    form {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    input[type="file"],
+    input[type="radio"],
+    input[type="text"],
+    input[type="submit"] {
+      margin-bottom: 10px;
+      background-color: #6ab04c;
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    input[type="submit"] {
+      background-color: #6ab04c;
+    }
+
+    #resizeFields,
+    #cropFields {
+      display: none;
+    }
+
+    .note {
+      color: #888;
+      font-size: 14px;
+    }
+  </style>
+  <script>
+    function toggleFields() {
+      const operationRadios = document.getElementsByName('operation');
+      const resizeFields = document.getElementById('resizeFields');
+      const cropFields = document.getElementById('cropFields');
+
+      resizeFields.style.display = 'none';
+      cropFields.style.display = 'none';
+
+      if (operationRadios[0].checked) {
+        resizeFields.style.display = 'block';
+      } else if (operationRadios[1].checked) {
+        cropFields.style.display = 'block';
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>Edit Image</h1>
+    <form method="post" enctype="multipart/form-data" action="/edit/">
+      {% csrf_token %}
+      <input type="file" name="image" required style="background-color: #6ab04c;"><br><br>
+      <input type="radio" name="operation" value="resize" required onclick="toggleFields()" style="background-color: #6ab04c;"> Resize Image<br>
+      <input type="radio" name="operation" value="crop" required onclick="toggleFields()" style="background-color: #6ab04c;"> Crop Image<br><br>
+
+      <div id="resizeFields">
+        Width: <input type="text" name="width"><br>
+        Height: <input type="text" name="height"><br>
+      </div>
+
+      <div id="cropFields">
+        <p class="note"><strong>Note:</strong> Please ensure that the following conditions are met:</p>
+        <ul class="note">
+          <li>Right value should be greater than Left value</li>
+          <li>Lower value should be greater than Upper value</li>
+        </ul>
+        <br>
+        Left: <input type="text" name="left"><br>
+        Upper: <input type="text" name="upper"><br>
+        Right: <input type="text" name="right"><br>
+        Lower: <input type="text" name="lower"><br>
+      </div>
+
+      <br>
+      <input type="submit" name="submit" value="Edit Image">
+    </form>
+  </div>
+</body>
+</html>
